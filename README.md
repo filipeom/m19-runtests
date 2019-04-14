@@ -54,7 +54,7 @@ You can then run, individually, all the test groups: A, B, C, D, E, F, J, K, L, 
 
 ## Authors
 
-* **Filipe Marques** - *Maintainer* - [PurpleBooth](https://github.com/filipeom)
+* **Filipe Marques** - *Maintainer* - [filipeom](https://github.com/filipeom)
 
 ## Acknowledgments
 
