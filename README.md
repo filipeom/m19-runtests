@@ -12,7 +12,7 @@ Add absolute path to **TEST_DIR**: the directory containting all the text *.m19*
 TEST_DIR=${HOME}/m19/tests-201903052202
 ```
 
-Then add the absolute path to **COMP_DIR**: the directory containing the *m19* exacutable (exclude the last / from path)
+Then add the absolute path to **COMP_DIR**: the directory containing the *m19* executable (exclude the last / from path)
 
 ```
 COMP_DIR=${HOME}/m19/m19
