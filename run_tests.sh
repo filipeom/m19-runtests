@@ -7,26 +7,27 @@
 TEST_DIR=${HOME}/m19/tests-201903052202
 COMP_DIR=${HOME}/m19/m19
 
-# ROOT - SAME MACROS AS IN M19 MAKEFILE
-# ONLY CHANGE ROOT ACCORDING TO SYSTEM ARCHITECTURE
+# ROOT - SAME PATH AS ROOT VAR IN M19 MAKEFILE!
 ROOT=${HOME}/compiladores/root
-
-LIB_DIR=${ROOT}/usr/lib
-
-# COMPILER EXECUTABLE NAME, SHOULDN'T HAVE TO CHANGE THIS
-COMP=m19
-# TARGET IS WHAT CODE TO GENERATE
-TARGET=asm
-TESTS=$1
 
 #==============================================================================
 #       PROBABLY, THERE'S NO NEED TO CHANGE ANYTHING BEYOND THIS POINT
 #==============================================================================
+# LIB PATH - USED IN LINKER
+LIB_DIR=${ROOT}/usr/lib
+
+# COMPILER PROGRAM NAME
+COMP=m19
+# TARGET IS WHAT CODE WILL BE GENERATED
+TARGET="asm"
+# TEST GROUP TO RUN - DEFAULT RUNS ALL
+TESTS=$1
 
 declare -i COMPOK=0
 declare -i YASMOK=0
 declare -i LDOK=0
 declare -i OK=0
+
 declare -i PASSED=0
 declare -i TOTAL=0
 
@@ -105,11 +106,44 @@ function running() {
   rm $1
 }
 
+function runtest() {
+  printf "\e[44m                              \e[97m$1\e[39m                              \e[49m\n"
+
+  printf "Compiler: "
+  compiler $1
+
+  if [ $TARGET != "asm" ]; then
+    return
+  fi
+
+  printf ", YASM: "
+  assembler $1
+
+  printf ", LD: "
+  linker $1
+
+  printf ", Running: "
+  running $1
+}
+
+function runtests() {
+  cd $TEST_DIR
+  for file in $TESTS*.m19; do
+    # INCREMENT TEST COUNT
+    TOTAL=$(( TOTAL += 1 ))
+
+    # GET TEST NAME
+    NAME=`echo "$file" | cut -d'.' -f1`
+
+    runtest $NAME
+  done
+}
+
 function results() {
   printf "\n"
   printf "\e[97m==============================[ \e[94mRESULTS\e[97m ]================================\e[39m\n"
   printf "\e[33mCOMPILER\e[39m: $COMPOK/$TOTAL tests with \e[32mOK\n"
-  if [ $TARGET == asm ]; then
+  if [ $TARGET == "asm" ]; then
     printf "\e[33mYASM\e[39m    : $YASMOK/$TOTAL tests with \e[32mOK\n"
     printf "\e[33mLD\e[39m      : $LDOK/$TOTAL tests with \e[32mOK\n"
     printf "\e[33mRUN\e[39m     : $OK/$TOTAL tests with \e[32mOK\n"
@@ -120,35 +154,19 @@ function results() {
 }
 
 function cleanup() {
-  if [ $TARGET == asm ]; then
+  if [ $TARGET == "asm" ]; then
     rm *.o *.asm expected/*.myout
   else
     rm *.xml
   fi
 }
 
-# RUN
-clear
-cd $TEST_DIR
-for file in $TESTS*.m19; do
-  TOTAL=$(( TOTAL += 1 ))
+function main() {
+  clear
+  runtests
+  results
+  cleanup
+}
 
-  NAME=`echo "$file" | cut -d'.' -f1`
-
-  printf "\e[44m                              \e[97m$NAME\e[39m                              \e[49m\n"
-
-  printf "Compiler: "
-  compiler $NAME
-
-  if [ $TARGET == asm ]; then
-    printf ", YASM: "
-    assembler $NAME
-    printf ", LD: "
-    linker $NAME
-    printf ", Running: "
-    running $NAME
-  fi
-done
-# PRINT RESULTS
-results
-cleanup
+# EXEC MAIN
+main
