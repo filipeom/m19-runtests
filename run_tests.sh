@@ -33,29 +33,29 @@ declare -i TOTAL=0
 
 # GENERATE CODE
 function compiler() {
-  cd $COMP_DIR
+  cd ${COMP_DIR}
 
-  ./$COMP --target $TARGET $TEST_DIR/$1.$COMP > /dev/null 2>&1
+  ./$COMP --target $TARGET ${TEST_DIR}/$1.$COMP > /dev/null 2>&1
 
-  if [ $? -eq 0 ]; then
+  if [[ $? -eq 0 ]]; then
     COMPOK=$(( COMPOK += 1 ))
     printf "\e[32mok\e[39m"
   else
     printf "\e[31mfailed\e[39m"
   fi
-  cd $TEST_DIR
+  cd ${TEST_DIR}
 }
 
 # YASM
 function assembler() {
-  if [ ! -f $1.asm ]; then
+  if [[ ! -f $1.asm ]]; then
     printf "\e[31mfailed\e[39m"
     return
   fi
 
   yasm -felf32 $1.asm > /dev/null 2>&1
 
-  if [ $? -eq 0 ]; then
+  if [[ $? -eq 0 ]]; then
     YASMOK=$(( YASMOK += 1 ))
     printf "\e[32mok\e[39m"
   else
@@ -65,14 +65,14 @@ function assembler() {
 
 # LINKER
 function linker() {
-  if [ ! -f $1.o ]; then
+  if [[ ! -f $1.o ]]; then
     printf "\e[31mfailed\e[39m"
     return
   fi
 
-  ld $1.o -m elf_i386 -L$LIB_DIR -lrts -o $1 > /dev/null 2>&1
+  ld $1.o -m elf_i386 -L${LIB_DIR} -lrts -o $1 > /dev/null 2>&1
 
-  if [ $? -eq 0 ]; then
+  if [[ $? -eq 0 ]]; then
     LDOK=$(( LDOK += 1 ))
     printf "\e[32mok\e[39m"
   else
@@ -82,20 +82,20 @@ function linker() {
 
 # RUNNING
 function running() {
-  if [ ! -f $1 ]; then
+  if [[ ! -f $1 ]]; then
     printf "\e[31mfailed\e[39m\n"
     return
   fi
 
   ./$1 > expected/$1.myout
-  if [ $? -eq 0 ]; then
+  if [[ $? -eq 0 ]]; then
     printf "\e[32mok\e[39m\n"
     OK=$(( OK += 1 ))
   else
     printf "\e[31mfailed\e[39m\n"
   fi
 
-  if [ "$(diff -w -E -B expected/$1.out expected/$1.myout)" != "" ]; then
+  if [[ "$(diff -w -E -B expected/$1.out expected/$1.myout)" ]]; then
     printf "\e[31mTEST FAILED!!\e[39m\n"
     printf "$(diff -c expected/$1.out expected/$1.myout)"
     printf "\n"
@@ -112,7 +112,7 @@ function runtest() {
   printf "Compiler: "
   compiler $1
 
-  if [ $TARGET != "asm" ]; then
+  if [[ $TARGET != "asm" ]]; then
     return
   fi
 
@@ -127,7 +127,7 @@ function runtest() {
 }
 
 function runtests() {
-  cd $TEST_DIR
+  cd ${TEST_DIR}
   for file in $TESTS*.m19; do
     # INCREMENT TEST COUNT
     TOTAL=$(( TOTAL += 1 ))
@@ -143,7 +143,7 @@ function results() {
   printf "\n"
   printf "\e[97m==============================[ \e[94mRESULTS\e[97m ]================================\e[39m\n"
   printf "\e[33mCOMPILER\e[39m: $COMPOK/$TOTAL tests with \e[32mOK\n"
-  if [ $TARGET == "asm" ]; then
+  if [[ $TARGET == "asm" ]]; then
     printf "\e[33mYASM\e[39m    : $YASMOK/$TOTAL tests with \e[32mOK\n"
     printf "\e[33mLD\e[39m      : $LDOK/$TOTAL tests with \e[32mOK\n"
     printf "\e[33mRUN\e[39m     : $OK/$TOTAL tests with \e[32mOK\n"
@@ -154,7 +154,7 @@ function results() {
 }
 
 function cleanup() {
-  if [ $TARGET == "asm" ]; then
+  if [[ $TARGET == "asm" ]]; then
     rm *.o *.asm expected/*.myout
   else
     rm *.xml
@@ -168,5 +168,5 @@ function main() {
   cleanup
 }
 
-# EXEC MAIN
+# EXECUTE MAIN
 main
