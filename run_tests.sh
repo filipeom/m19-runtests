@@ -48,12 +48,14 @@ function compiler() {
 
 # YASM
 function assembler() {
-  if [[ ! -f $1.asm ]]; then
+  declare test_name="$1"
+
+  if [[ ! -f $test_name.asm ]]; then
     printf "\e[31mfailed\e[39m"
     return
   fi
 
-  yasm -felf32 $1.asm > /dev/null 2>&1
+  yasm -felf32 $test_name.asm > /dev/null 2>&1
 
   if [[ $? -eq 0 ]]; then
     YASMOK=$(( YASMOK += 1 ))
@@ -65,12 +67,14 @@ function assembler() {
 
 # LINKER
 function linker() {
-  if [[ ! -f $1.o ]]; then
+  declare test_name="$1"
+
+  if [[ ! -f $test_name.o ]]; then
     printf "\e[31mfailed\e[39m"
     return
   fi
 
-  ld $1.o -m elf_i386 -L${LIB_DIR} -lrts -o $1 > /dev/null 2>&1
+  ld $test_name.o -m elf_i386 -L${LIB_DIR} -lrts -o $test_name > /dev/null 2>&1
 
   if [[ $? -eq 0 ]]; then
     LDOK=$(( LDOK += 1 ))
@@ -82,12 +86,14 @@ function linker() {
 
 # RUNNING
 function running() {
-  if [[ ! -f $1 ]]; then
+  declare test="$1"
+
+  if [[ ! -f $test ]]; then
     printf "\e[31mfailed\e[39m\n"
     return
   fi
 
-  ./$1 > expected/$1.myout
+  ./$test > expected/$test.myout
   if [[ $? -eq 0 ]]; then
     printf "\e[32mok\e[39m\n"
     OK=$(( OK += 1 ))
@@ -95,35 +101,37 @@ function running() {
     printf "\e[31mfailed\e[39m\n"
   fi
 
-  if [[ "$(diff -w -E -B expected/$1.out expected/$1.myout)" ]]; then
+  if [[ "$(diff -w -E -B expected/$test.out expected/$test.myout)" ]]; then
     printf "\e[31mTEST FAILED!!\e[39m\n"
-    printf "$(diff -c expected/$1.out expected/$1.myout)"
+    printf "$(diff -c expected/$test.out expected/$test.myout)"
     printf "\n"
   else
     printf "\e[32mTEST PASSED!!\e[39m\n"
     PASSED=$(( PASSED +=1 ))
   fi
-  rm $1
+  rm $test
 }
 
 function runtest() {
-  printf "\e[44m                              \e[97m$1\e[39m                              \e[49m\n"
+  declare test_name="$1"
+
+  printf "\e[44m                              \e[97m$test_name\e[39m                              \e[49m\n"
 
   printf "Compiler: "
-  compiler $1
+  compiler $test_name
 
   if [[ $TARGET != "asm" ]]; then
     return
   fi
 
   printf ", YASM: "
-  assembler $1
+  assembler $test_name
 
   printf ", LD: "
-  linker $1
+  linker $test_name
 
   printf ", Running: "
-  running $1
+  running $test_name
 }
 
 function runtests() {
@@ -169,4 +177,4 @@ function main() {
 }
 
 # EXECUTE MAIN
-main
+main "$@"
