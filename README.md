@@ -21,7 +21,7 @@ COMP_DIR=${HOME}/m19/m19
 If you need to, add absolute path to **ROOT**: this directory contains the libcdk and librts code, this should be equal to root path in *m19* Makefile
 
 ```
- ROOT=${HOME}/compiladores/root
+ROOT=${HOME}/compiladores/root
 ```
 
 Make the script executable:
@@ -31,6 +31,22 @@ chmod +x run_tests.sh
 ```
 
 ## Running the tests
+
+### Usage
+
+```
+USAGE: ./run_tests.sh [-h] [-p PREFIX] [-t TARGET]
+Runs test files with m19. if PREFIX is set then only the tests that
+begin with said PREFIX will be ran. TARGET is either xml or asm, the
+default value of TARGET is asm.
+
+-h        display this help and exit
+-p PREFIX run test starting with PREFIX
+-t TARGET run m19 to generate TARGET
+
+```
+
+### Examples
 
 To run all tests do:
 
@@ -43,10 +59,16 @@ If the paths are well configured then the script can be ran from any directory!
 To run test groups, for example, if you only want to run the tests begining with A:
 
 ```
-./run_tests.sh A
+./run_tests.sh -p A
 ```
 
 You can then run, individually, all the test groups: A, B, C, D, E, F, J, K, L, M, O, P, Q
+
+To run all tests in xml simply do:
+
+```
+./run_tests.sh -t xml
+```
 
 ## Built With
 

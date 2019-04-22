@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -o nounset
+
 #==============================================================================
 #                   CONFIGURE THESE VARIABLES IF NEEDED
 #==============================================================================
@@ -21,7 +24,7 @@ COMP=m19
 # TARGET IS WHAT CODE WILL BE GENERATED
 TARGET="asm"
 # TEST GROUP TO RUN - DEFAULT RUNS ALL
-TESTS=$1
+TESTS=""
 
 declare -i COMPOK=0
 declare -i YASMOK=0
@@ -121,6 +124,7 @@ function runtest() {
   compiler $test_name
 
   if [[ $TARGET != "asm" ]]; then
+    printf "\n"
     return
   fi
 
@@ -169,8 +173,38 @@ function cleanup() {
   fi
 }
 
+function show_help() {
+  printf "USAGE: ${0##*/} [-p PREFIX] [-t TARGET]\n\n"
+  printf "Runs tests files with m19. if PREFIX is set then only the tests that\n"
+  printf "begin with said PREFIX will be ran. TARGET is either xml or asm, the\n"
+  printf "default value of TARGET is asm.\n"
+  printf "    -h         display this help and exit\n"
+  printf "    -p PREFIX  run test beginig with PREFIX\n"
+  printf "    -t TARGET  run m19 to generate TARGET\n\n"
+}
+
+function parse_args() {
+  local OPTIND=1
+
+  while getopts "hp:t:" opt; do
+    case "${opt}" in
+      h)
+        show_help
+        exit 0
+        ;;
+      p)
+        TESTS="$OPTARG"
+        ;;
+      t)
+        TARGET="$OPTARG"
+        ;;
+    esac
+  done
+  shift "$(( OPTIND - 1 ))"
+}
+
 function main() {
-  clear
+  parse_args "$@"
   runtests
   results
   cleanup
