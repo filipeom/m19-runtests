@@ -140,7 +140,7 @@ function runtest() {
 
 function runtests() {
   cd ${TEST_DIR}
-  for file in $TESTS*.m19; do
+  for file in $TESTS*.$COMP; do
     # INCREMENT TEST COUNT
     TOTAL=$(( TOTAL += 1 ))
 
