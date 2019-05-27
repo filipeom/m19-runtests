@@ -7,8 +7,8 @@ set -o nounset
 #==============================================================================
 
 # GIVE ABSOLUTE DIR PATHS!
-TEST_DIR=${HOME}/m19/tests-201903052202
-COMP_DIR=${HOME}/m19/m19
+TEST_DIR=${HOME}/runtests-m19/tests
+COMP_DIR=${HOME}/m19
 
 # ROOT - SAME PATH AS ROOT VAR IN M19 MAKEFILE!
 ROOT=${HOME}/compiladores/root
