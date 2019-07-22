@@ -2,6 +2,8 @@
 
 A Simple and goodlooking script to test m19 compiler.
 
+[[images/runscript.png]]
+
 ## Getting Started
 
 ### Configuring Paths
