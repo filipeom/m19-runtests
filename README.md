@@ -2,8 +2,9 @@
 
 A Simple and goodlooking script to test m19 compiler.
 
-[[images/runscript.png]]
-
+<p align="center">
+  <img width="593px" height="697px" src="https://raw.githubusercontent.com/filipeom/m19-runtests/master/images/runscript.png">
+</p>
 ## Getting Started
 
 ### Configuring Paths
