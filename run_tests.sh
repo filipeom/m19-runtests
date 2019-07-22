@@ -26,6 +26,18 @@ TARGET="asm"
 # TEST GROUP TO RUN - DEFAULT RUNS ALL
 TESTS=""
 
+# COLORS
+B="\e[1;94m"
+W="\e[1;97m"
+
+R="\e[1;31m"
+G="\e[1;32m"
+O="\e[1;33m"
+D="\e[0;39m"
+
+BK_B="\e[0;44m"
+BK_D="\e[0;49m"
+
 declare -i COMPOK=0
 declare -i YASMOK=0
 declare -i LDOK=0
@@ -42,9 +54,9 @@ function compiler() {
 
   if [[ $? -eq 0 ]]; then
     COMPOK=$(( COMPOK += 1 ))
-    printf "\e[32mok\e[39m"
+    printf "${G}ok${D}"
   else
-    printf "\e[31mfailed\e[39m"
+    printf "${R}failed${D}"
   fi
   cd ${TEST_DIR}
 }
@@ -54,7 +66,7 @@ function assembler() {
   declare test_name="$1"
 
   if [[ ! -f $test_name.asm ]]; then
-    printf "\e[31mfailed\e[39m"
+    printf "${R}failed${D}"
     return
   fi
 
@@ -62,9 +74,9 @@ function assembler() {
 
   if [[ $? -eq 0 ]]; then
     YASMOK=$(( YASMOK += 1 ))
-    printf "\e[32mok\e[39m"
+    printf "${G}ok${D}"
   else
-    printf "\e[31mfailed\e[39m"
+    printf "${R}failed${D}"
   fi
 }
 
@@ -73,7 +85,7 @@ function linker() {
   declare test_name="$1"
 
   if [[ ! -f $test_name.o ]]; then
-    printf "\e[31mfailed\e[39m"
+    printf "${R}failed${D}"
     return
   fi
 
@@ -81,9 +93,9 @@ function linker() {
 
   if [[ $? -eq 0 ]]; then
     LDOK=$(( LDOK += 1 ))
-    printf "\e[32mok\e[39m"
+    printf "${G}ok${D}"
   else
-    printf "\e[31mfailed\e[39m"
+    printf "${R}failed${D}"
   fi
 }
 
@@ -92,24 +104,24 @@ function running() {
   declare test="$1"
 
   if [[ ! -f $test ]]; then
-    printf "\e[31mfailed\e[39m\n"
+    printf "${R}failed${D}"
     return
   fi
 
   ./$test > expected/$test.myout
   if [[ $? -eq 0 ]]; then
-    printf "\e[32mok\e[39m\n"
+    printf "${G}ok${D}"
     OK=$(( OK += 1 ))
   else
-    printf "\e[31mfailed\e[39m\n"
+    printf "${R}failed${D}"
   fi
 
   if [[ "$(diff -w -E -B expected/$test.out expected/$test.myout)" ]]; then
-    printf "\e[31mTEST FAILED!!\e[39m\n"
+    printf "\n${R}TEST FAILED!!${D}\n"
     printf "$(diff -c expected/$test.out expected/$test.myout)"
     printf "\n"
   else
-    printf "\e[32mTEST PASSED!!\e[39m\n"
+    printf "\n${G}TEST PASSED!!${D}\n"
     PASSED=$(( PASSED +=1 ))
   fi
   rm $test
@@ -118,7 +130,7 @@ function running() {
 function runtest() {
   declare test_name="$1"
 
-  printf "\e[44m                              \e[97m$test_name\e[39m                              \e[49m\n"
+  printf "${BK_B}                              ${W}$test_name${D}${BK_B}                              ${BK_D}\n"
 
   printf "Compiler: "
   compiler $test_name
@@ -153,15 +165,15 @@ function runtests() {
 
 function results() {
   printf "\n"
-  printf "\e[97m==============================[ \e[94mRESULTS\e[97m ]================================\e[39m\n"
-  printf "\e[33mCOMPILER\e[39m: $COMPOK/$TOTAL tests with \e[32mOK\n"
+  printf "${W}==============================[ ${B}RESULTS${W} ]================================${D}\n"
+  printf "${O}COMPILER${D} : $COMPOK/$TOTAL tests with ${G}OK\n"
   if [[ $TARGET == "asm" ]]; then
-    printf "\e[33mYASM\e[39m    : $YASMOK/$TOTAL tests with \e[32mOK\n"
-    printf "\e[33mLD\e[39m      : $LDOK/$TOTAL tests with \e[32mOK\n"
-    printf "\e[33mRUN\e[39m     : $OK/$TOTAL tests with \e[32mOK\n"
-    printf "\e[33mPASSED\e[39m  : $PASSED/$TOTAL tests with \e[32mOK\n"
+    printf "${O}YASM${D}     : $YASMOK/$TOTAL tests with ${G}OK\n"
+    printf "${O}LD${D}       : $LDOK/$TOTAL tests with ${G}OK\n"
+    printf "${O}RUN${D}      : $OK/$TOTAL tests with ${G}OK\n"
+    printf "${O}PASSED${D}   : $PASSED/$TOTAL tests with ${G}OK\n"
   fi
-  printf "\e[97m=========================================================================\e[39m\n"
+  printf "${W}=========================================================================${D}\n"
   printf "\n"
 }
 
