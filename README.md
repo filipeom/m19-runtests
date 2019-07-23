@@ -8,6 +8,8 @@ A Simple and goodlooking script to test m19 compiler.
 
 ### Configuring Paths
 
+In the `config.sh`:
+
 Add absolute path to **TEST_DIR**: the directory containting all the text *.m19* files (exclude the last / from path)
 
 ```
