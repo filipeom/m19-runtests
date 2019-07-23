@@ -149,12 +149,12 @@ function runtests() {
 function results() {
   printf "\n"
   printf "${W}==============================[ ${B}RESULTS${W} ]================================${D}\n"
-  printf "${O}COMPILER${D} : $COMPOK/$TOTAL tests with ${G}OK\n"
+  printf "   ${O}COMPILER${D} ${B}:${D} $COMPOK/$TOTAL tests with ${G}OK\n"
   if [[ $TARGET == "asm" ]]; then
-    printf "${O}YASM${D}     : $YASMOK/$TOTAL tests with ${G}OK\n"
-    printf "${O}LD${D}       : $LDOK/$TOTAL tests with ${G}OK\n"
-    printf "${O}RUN${D}      : $OK/$TOTAL tests with ${G}OK\n"
-    printf "${O}PASSED${D}   : $PASSED/$TOTAL tests with ${G}OK\n"
+    printf "       ${O}YASM${D} ${B}:${D} $YASMOK/$TOTAL tests with ${G}OK\n"
+    printf "         ${O}LD${D} ${B}:${D} $LDOK/$TOTAL tests with ${G}OK\n"
+    printf "        ${O}RUN${D} ${B}:${D} $OK/$TOTAL tests with ${G}OK\n"
+    printf "     ${O}PASSED${D} ${B}:${D} $PASSED/$TOTAL tests with ${G}OK\n"
   fi
   printf "${W}=========================================================================${D}\n"
   printf "\n"
