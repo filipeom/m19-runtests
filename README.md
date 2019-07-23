@@ -1,6 +1,6 @@
 # M19 Run Tests Script
 
-A Simple and goodlooking script to test m19 compiler.
+A Simple and "good looking" script to test m19 compiler.
 
 <p align="center">
   <img width="593px" height="697px" src="https://raw.githubusercontent.com/filipeom/m19-runtests/master/images/runscript.png">
@@ -10,21 +10,21 @@ A Simple and goodlooking script to test m19 compiler.
 
 ### Configuring Paths
 
-In the `config.sh`:
+In the `config.sh` file:
 
-Add absolute path to **TEST_DIR**: the directory containting all the text *.m19* files (exclude the last / from path)
+Add absolute path to **TEST_DIR**: the directory containting all the text `.m19` files (exclude the last / from path), example:
 
 ```
 TEST_DIR=${HOME}/m19/tests-201903052202
 ```
 
-Then add the absolute path to **COMP_DIR**: the directory containing the *m19* executable (exclude the last / from path)
+Then add the absolute path to **COMP_DIR**: the directory containing the `m19` executable (exclude the last / from path), example:
 
 ```
 COMP_DIR=${HOME}/m19/m19
 ```
 
-If you need to, add absolute path to **ROOT**: this directory contains the libcdk and librts code, this should be equal to root path in *m19* Makefile
+If you need to, add absolute path to **ROOT**: this directory contains the libcdk and librts code, this should be equal to root path in m19 `Makefile`
 
 ```
 ROOT=${HOME}/compiladores/root
