@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-source "${HOME}/runtests-m19/config.sh"
-
 # COMPILER PROGRAM NAME
 COMP="m19"
 
@@ -201,6 +199,13 @@ function parse_args() {
 }
 
 function main() {
+  source "${HOME}/runtests-m19/config.sh" > /dev/null 2>&1
+
+  if [[ $? -ne 0 ]]; then
+    printf "[${R}!${D}] Unable to load configuration file!\n"
+    exit -1
+  fi
+
   parse_args "$@"
   runtests
   results
